@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudOps.Application\CloudOps.Application.csproj" />
+    <ProjectReference Include="..\CloudOps.Infrastructure\CloudOps.Infrastructure.csproj" />
+    <ProjectReference Include="..\CloudOps.Contracts\CloudOps.Contracts.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

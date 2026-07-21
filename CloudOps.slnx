@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CloudOps.Api/CloudOps.Api.csproj" />
+    <Project Path="src/CloudOps.Application/CloudOps.Application.csproj" />
+    <Project Path="src/CloudOps.Contracts/CloudOps.Contracts.csproj" />
+    <Project Path="src/CloudOps.Domain/CloudOps.Domain.csproj" />
+    <Project Path="src/CloudOps.Infrastructure/CloudOps.Infrastructure.csproj" />
+    <Project Path="src/CloudOps.Shared/CloudOps.Shared.csproj" />
+    <Project Path="src/CloudOps.Worker/CloudOps.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CloudOps.ArchitectureTests/CloudOps.ArchitectureTests.csproj" />
+    <Project Path="tests/CloudOps.IntegrationTests/CloudOps.IntegrationTests.csproj" />
+    <Project Path="tests/CloudOps.UnitTests/CloudOps.UnitTests.csproj" />
+  </Folder>
+</Solution>
