@@ -43,8 +43,6 @@ public sealed class MessagingConstruct : Construct
             RemovalPolicy = RemovalPolicy.DESTROY
         });
 
-        Resources = new MessagingResources(eventQueue,deadLetterQueue);
-
         new CfnOutput(this, "EventQueueUrl", new CfnOutputProps
         {
             Value = eventQueue.QueueUrl,
@@ -56,5 +54,7 @@ public sealed class MessagingConstruct : Construct
             Value = deadLetterQueue.QueueUrl,
             Description = "Dead Letter Queue URL"
         });
+
+        Resources = new MessagingResources(eventQueue,deadLetterQueue);
     }
 }

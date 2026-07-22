@@ -17,5 +17,7 @@ public sealed class CloudOpsPlatformStack : Stack
         _ = new StorageConstruct(this, "Storage", config);
 
         _ = new MessagingConstruct(this, "Messaging", config);
+
+        _ = new NotificationConstruct(this,"Notifications", config);
     }
 }
