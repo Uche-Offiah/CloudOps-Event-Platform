@@ -15,4 +15,7 @@ public static class ResourceNaming
 
     public static string AlertsTopic(PlatformConfig config)
         => $"{config.ApplicationName}-{config.Environment}-alerts";
+
+    public static string DashboardName(PlatformConfig config)
+        => $"{config.ApplicationName}-{config.Environment}-dashboard";
 }
