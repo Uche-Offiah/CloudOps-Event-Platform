@@ -15,5 +15,7 @@ public sealed class CloudOpsPlatformStack : Stack
 		TagHelper.ApplyDefaultTags(this, config);
 
         _ = new StorageConstruct(this, "Storage", config);
+
+        _ = new MessagingConstruct(this, "Messaging", config);
     }
 }
