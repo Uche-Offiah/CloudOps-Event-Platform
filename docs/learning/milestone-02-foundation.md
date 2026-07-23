@@ -108,3 +108,43 @@ SQS
 ```
 
 This will connect the application layer with the AWS infrastructure created during Milestone 1.
+
+
+---
+
+## Milestone Retrospective
+
+**`docs/learning/milestone-02-event-ingestion.md`**
+
+
+# Milestone 02 – Event Ingestion
+
+## Objective
+
+Build the first end-to-end vertical slice from HTTP request to Amazon SQS.
+
+## Achievements
+
+- Implemented Clean Architecture boundaries.
+- Created the first application use case.
+- Designed a canonical event envelope.
+- Integrated with Amazon SQS.
+- Verified end-to-end message publishing.
+- Established dependency injection patterns.
+- Added structured logging.
+- Documented architectural decisions.
+
+## Lessons Learned
+
+- Keep AWS dependencies in the infrastructure layer.
+- Design message contracts before implementing integrations.
+- Structured logging provides better operational visibility than string interpolation.
+- Favor abstractions in the application layer to improve testability.
+
+## Future Improvements
+
+- Fluent validation or equivalent.
+- OpenAPI integration once package dependencies are updated.
+- Distributed tracing.
+- Request correlation via HTTP headers.
+- Contract versioning strategy.
