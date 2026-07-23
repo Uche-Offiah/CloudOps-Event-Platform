@@ -1,5 +1,6 @@
 using Amazon.CDK;
 using Amazon.CDK.AWS.DynamoDB;
+using DynamoAttribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Constructs;
 using Infra.Common;
 using Infra.Config;
@@ -16,7 +17,7 @@ public sealed class StorageConstruct : Construct
         {
             TableName = ResourceNaming.EventsTable(config),
 
-            PartitionKey = new Attribute
+            PartitionKey = new DynamoAttribute
             {
                 Name = "EventId",
                 Type = AttributeType.STRING
