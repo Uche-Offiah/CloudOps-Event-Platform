@@ -19,18 +19,6 @@ public sealed class Worker: BackgroundService
         _awsOptions = awsOptions.Value;
         _logger = logger;
     }
-    // protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    // {
-    //     while (!stoppingToken.IsCancellationRequested)
-    //     {
-    //         logger.LogInformation("Worker heartbeat at {Time}", DateTimeOffset.UtcNow);
-    //         // if (logger.IsEnabled(LogLevel.Information))
-    //         // {
-    //         //     logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-    //         // }
-    //         await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
-    //     }
-    // }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -40,6 +28,8 @@ public sealed class Worker: BackgroundService
         {
             try
             {
+                _logger.LogInformation("Creating ReceiveMessageRequest...");
+
                 var request = new ReceiveMessageRequest
                 {
                     QueueUrl = _awsOptions.EventQueueUrl,
@@ -48,17 +38,27 @@ public sealed class Worker: BackgroundService
                     VisibilityTimeout = 30
                 };
 
+                _logger.LogInformation("ReceiveMessageAsync completed.");
+
                 var response = await _sqs.ReceiveMessageAsync(request, stoppingToken);
 
-                _logger.LogInformation(
-                    "Received {Count} message(s).",
-                    response.Messages.Count);
+                var messages = response.Messages ?? [];
 
-                foreach (var message in response.Messages)
+                if (messages.Count == 0)
                 {
-                    _logger.LogInformation(
-                        "MessageId: {MessageId}",
-                        message.MessageId);
+                    _logger.LogDebug("No messages available.");
+                    continue;
+                }
+
+                // _logger.LogInformation("Received {Count} message(s).", messages.Count);
+                // _logger.LogInformation("ReceiveMessageAsync completed.");
+                _logger.LogInformation("Received {Count} message(s).", messages.Count);
+
+                foreach (var message in messages)
+                {
+                    //_logger.LogInformation("About to log MessageId.");
+                    _logger.LogInformation("MessageId: {MessageId}", message.MessageId);
+                    _logger.LogInformation("Finished processing message.");
                 }
             }
             catch (OperationCanceledException)
@@ -69,7 +69,7 @@ public sealed class Worker: BackgroundService
             {
                 _logger.LogError(
                     ex,
-                    "Unexpected error while polling Amazon SQS.");
+                    "Unexpected error while polling Amazon SQS. StackTrace: {StackTrace}", ex.StackTrace);
             }
         }
 

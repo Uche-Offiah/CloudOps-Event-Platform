@@ -1,3 +1,4 @@
+using CloudOps.Application.Features.Events.ProcessEvent;
 using CloudOps.Application.Features.Events.SubmitEvent;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services.AddScoped<ISubmitEventHandler, SubmitEventHandler>();
+        services.AddScoped<IEventMessageProcessor, EventMessageProcessor>();
 
         return services;
     }
