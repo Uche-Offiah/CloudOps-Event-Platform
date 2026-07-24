@@ -1,5 +1,6 @@
 using CloudOps.Application.Features.Events.ProcessEvent;
 using CloudOps.Application.Features.Events.SubmitEvent;
+using CloudOps.Application.Interfaces.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudOps.Application.DependencyInjection;

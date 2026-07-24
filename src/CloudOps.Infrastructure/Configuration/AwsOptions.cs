@@ -7,4 +7,5 @@ public sealed class AwsOptions
     public required string Region { get; init; }
 
     public required string EventQueueUrl { get; init; }
+    public required string EventsTableName { get; init; }
 }
