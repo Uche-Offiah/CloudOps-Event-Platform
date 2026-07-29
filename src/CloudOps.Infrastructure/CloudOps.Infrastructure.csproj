@@ -4,6 +4,13 @@
     <ProjectReference Include="..\CloudOps.Application\CloudOps.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.100.6" />
+    <PackageReference Include="AWSSDK.SQS" Version="4.0.100.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.10" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

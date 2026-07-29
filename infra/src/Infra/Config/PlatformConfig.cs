@@ -18,6 +18,10 @@ public sealed class PlatformConfig
             ["Platform"] = PlatformName,
             ["Environment"] = Environment,
             ["ManagedBy"] = "AWS CDK",
-            ["Owner"] = Owner
+            ["Owner"] = Owner,
+            ["Project"] = "CloudOps Event Platform",
+            ["Repository"] = "CloudOps-Event-Platform",
+            ["Provisioner"] = "AWS CDK",
+            ["Version"] = "1.0.0"
         };
 }
