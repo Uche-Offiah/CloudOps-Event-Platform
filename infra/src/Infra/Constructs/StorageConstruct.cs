@@ -27,5 +27,11 @@ public sealed class StorageConstruct : Construct
 
             RemovalPolicy = RemovalPolicy.DESTROY
         });
+
+        new CfnOutput(this, "EventsTableName", new CfnOutputProps
+        {
+            Value = EventsTable.TableName,
+            ExportName = "CloudOps-EventsTableName"
+        });
     }
 }
