@@ -14,27 +14,29 @@ public sealed class Worker: BackgroundService
     private readonly AwsOptions _awsOptions;
     private readonly ILogger<Worker> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IEventMessageProcessor _messageProcessor;
+    //private readonly IEventMessageProcessor _messageProcessor;
 
-    public Worker(IAmazonSQS sqs, IOptions<AwsOptions> awsOptions, ILogger<Worker> logger, IServiceScopeFactory scopeFactory, IEventMessageProcessor messageProcessor)
+    public Worker(IAmazonSQS sqs, IOptions<AwsOptions> awsOptions, ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
     {
         _sqs = sqs;
         _awsOptions = awsOptions.Value;
         _logger = logger;
         _scopeFactory = scopeFactory;
-        _messageProcessor =  messageProcessor;
+        //_messageProcessor =  messageProcessor;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
-        using var scope = _scopeFactory.CreateScope();
-
-        var processor = scope.ServiceProvider.GetRequiredService<IEventMessageProcessor>();
+        
         _logger.LogInformation("CloudOps Worker started.");
 
         while (!stoppingToken.IsCancellationRequested)
         {
+
+            using var scope = _scopeFactory.CreateScope();
+            var processor = scope.ServiceProvider.GetRequiredService<IEventMessageProcessor>();
+            
             try
             {
                 var request = new ReceiveMessageRequest

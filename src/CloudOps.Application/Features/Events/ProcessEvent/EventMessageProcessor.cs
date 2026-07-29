@@ -24,6 +24,7 @@ public sealed class EventMessageProcessor(
                 return ProcessingResult.Failure("Unable to deserialize EventEnvelope.");
             }
 
+            _logger.LogInformation("Processing EventId {EventId} ({EventType}) from {Source}.", envelope.EventId, envelope.EventType, envelope.Source);           
             await _repository.SaveAsync( envelope, cancellationToken);
 
             _logger.LogInformation("Successfully persisted event {EventId}", envelope.EventId);
