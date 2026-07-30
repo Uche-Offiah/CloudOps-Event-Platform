@@ -21,10 +21,22 @@ public sealed class EventMessageProcessor(
 
             if (envelope is null)
             {
+                _logger.LogWarning("Unable to deserialize event envelope");
+
                 return ProcessingResult.Failure("Unable to deserialize EventEnvelope.");
             }
 
-            _logger.LogInformation("Processing EventId {EventId} ({EventType}) from {Source}.", envelope.EventId, envelope.EventType, envelope.Source);           
+            using var scope = _logger.BeginScope(
+                new Dictionary<string, object?>
+                {
+                    ["EventId"] = envelope.EventId,
+                    ["CorrelationId"] = envelope.CorrelationId,
+                    ["EventType"] = envelope.EventType,
+                    ["Source"] = envelope.Source
+                }
+            );
+            
+            _logger.LogInformation("Event processing started.");           
             await _repository.SaveAsync( envelope, cancellationToken);
 
             _logger.LogInformation("Successfully persisted event {EventId}", envelope.EventId);

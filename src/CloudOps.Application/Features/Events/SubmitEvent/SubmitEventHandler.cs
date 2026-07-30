@@ -31,6 +31,16 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
 
         var correlationId = _correlationIdProvider.Create();
 
+        using var scope = _logger.BeginScope(
+            new Dictionary<string, object?>
+            {
+                ["EventId"] = eventId,
+                ["CorrelationId"] = correlationId,
+                ["EventType"] = command.EventType,
+                ["Source"] = command.Source
+            }
+        );
+
         using var document = JsonDocument.Parse(command.Payload);
 
         var envelope = new EventEnvelope(
@@ -40,15 +50,14 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
             acceptedAt,
             correlationId,
             Version:  EventEnvelopeVersions.Initial,
-            Payload: document.RootElement.Clone());
-
-            _logger.LogInformation("Submitting event {EventId} ({EventType}) from {Source} with CorrelationId {CorrelationId}",
-            eventId,
-            command.EventType,
-            command.Source,
-            correlationId);
+            Payload: document.RootElement.Clone()
+        );
+        
+         _logger.LogInformation("Submitting event");
 
         await _publisher.PublishAsync(envelope, cancellationToken);
+
+        _logger.LogInformation("Event submitted successfully.");
 
         return new SubmitEventResult(eventId, acceptedAt);
     }
