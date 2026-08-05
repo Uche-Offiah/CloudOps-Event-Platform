@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+  api:
+    container_name: cloudops-api
+
+    image: cloudops-api:latest
+
+    build:
+      context: .
+      dockerfile: src/CloudOps.Api/Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+    restart: unless-stopped
+
+    networks:
+      - cloudops
+
+  worker:
+    container_name: cloudops-worker
+
+    image: cloudops-worker:latest
+
+    build:
+      context: .
+      dockerfile: src/CloudOps.Worker/Dockerfile
+
+    environment:
+      DOTNET_ENVIRONMENT: Development
+
+    restart: unless-stopped
+
+    depends_on:
+      api:
+        condition: service_started
+
+    networks:
+      - cloudops
+
+networks:
+  cloudops:
+    driver: bridge
