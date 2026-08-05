@@ -18,8 +18,8 @@ public sealed class CloudOpsPlatformStack : Stack
 
         _ = new MessagingConstruct(this, "Messaging", config);
 
-        _ = new NotificationConstruct(this,"Notifications", config);
+        var notifications = new NotificationConstruct(this,"Notifications", config);
 
-        _ = new MonitoringConstruct(this, "Monitoring", config);
+        _ = new MonitoringConstruct(this, "Monitoring", config, notifications.Resources.AlertsTopic);
     }
 }

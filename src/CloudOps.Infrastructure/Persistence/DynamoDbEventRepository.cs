@@ -17,7 +17,17 @@ public sealed class DynamoDbEventRepository(
     private readonly ILogger<DynamoDbEventRepository> _logger = logger;
 
     public async Task SaveAsync(EventEnvelope envelope, CancellationToken cancellationToken)
-    {        
+    {
+        using var scope = _logger.BeginScope(
+            new Dictionary<string, object?>
+            {
+                ["EventId"] = envelope.EventId,
+                ["CorrelationId"] = envelope.CorrelationId,
+                ["EventType"] = envelope.EventType,
+                ["Source"] = envelope.Source,
+                ["TableName"] = _awsOptions.EventsTableName
+            }
+        );
         var request = new PutItemRequest
         {
             TableName = _awsOptions.EventsTableName,
@@ -66,19 +76,19 @@ public sealed class DynamoDbEventRepository(
 
         try
         {
-            _logger.LogInformation("Persisting event {EventId} to DynamoDB table {TableName}.", envelope.EventId, _awsOptions.EventsTableName);
+            _logger.LogInformation("Persisting event to DynamoDB");
 
             await _dynamoDb.PutItemAsync(request, cancellationToken);
 
-            _logger.LogInformation("Successfully persisted EventId {EventId}.",envelope.EventId);
+            _logger.LogInformation("Event successfully persisted");
         }
         catch (ConditionalCheckFailedException ex)
         {
-            _logger.LogWarning(ex, "Duplicate EventId {EventId} detected.", envelope.EventId);
+            _logger.LogWarning(ex, "Duplicate EventId detected.");
 
             throw;
         }
 
-        _logger.LogInformation("Successfully persisted event {EventId}.", envelope.EventId);
+        _logger.LogInformation("Successfully persisted event");
     }
 }

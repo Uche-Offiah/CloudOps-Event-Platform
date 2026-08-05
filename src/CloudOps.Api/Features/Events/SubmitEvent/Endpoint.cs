@@ -5,7 +5,7 @@ namespace CloudOps.Api.Features.Events.SubmitEvent;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapSubmitEvent( this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapSubmitEvent(this IEndpointRouteBuilder app)
     {
         app.MapPost("/events", async (SubmitEventRequest request, ISubmitEventHandler handler, CancellationToken cancellationToken) =>
             {

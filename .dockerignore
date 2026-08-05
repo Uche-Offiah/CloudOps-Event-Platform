@@ -1,0 +1,49 @@
+# Git
+
+.git
+.gitignore
+
+# GitHub
+
+.github
+
+# Visual Studio
+
+.vs
+.vscode
+
+# Rider
+
+.idea
+
+# Build Output
+
+**/bin/
+**/obj/
+
+# Test Results
+
+TestResults/
+coverage/
+
+# User Files
+
+*.user
+*.suo
+
+# OS
+
+.DS_Store
+Thumbs.db
+
+# Documentation
+
+docs/
+
+# Infrastructure
+
+infra/cdk.out/
+
+# Docker
+
+docker-compose.override.yml

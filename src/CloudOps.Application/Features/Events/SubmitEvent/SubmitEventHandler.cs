@@ -24,12 +24,22 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
     public async Task<SubmitEventResult> HandleAsync(SubmitEventCommand command, CancellationToken cancellationToken)
     {
         SubmitEventValidator.Validate(command);
-        
+
         var eventId = Guid.NewGuid();
 
         var acceptedAt = _clock.UtcNow;
 
         var correlationId = _correlationIdProvider.Create();
+
+        using var scope = _logger.BeginScope(
+            new Dictionary<string, object?>
+            {
+                ["EventId"] = eventId,
+                ["CorrelationId"] = correlationId,
+                ["EventType"] = command.EventType,
+                ["Source"] = command.Source
+            }
+        );
 
         using var document = JsonDocument.Parse(command.Payload);
 
@@ -39,16 +49,15 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
             command.Source,
             acceptedAt,
             correlationId,
-            Version:  EventEnvelopeVersions.Initial,
-            Payload: document.RootElement.Clone());
+            Version: EventEnvelopeVersions.Initial,
+            Payload: document.RootElement.Clone()
+        );
 
-            _logger.LogInformation("Submitting event {EventId} ({EventType}) from {Source} with CorrelationId {CorrelationId}",
-            eventId,
-            command.EventType,
-            command.Source,
-            correlationId);
+        _logger.LogInformation("Submitting event");
 
         await _publisher.PublishAsync(envelope, cancellationToken);
+
+        _logger.LogInformation("Event submitted successfully.");
 
         return new SubmitEventResult(eventId, acceptedAt);
     }

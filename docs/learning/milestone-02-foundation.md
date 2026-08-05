@@ -1,150 +1,190 @@
-# Milestone 02 Retrospective — Application Foundation
+# Milestone 2 – Event Ingestion Foundation
 
-## Overview
+**Milestone:** 2  
+**Release:** v0.2.0  
+**Date Completed:** July 2026
 
-This milestone established the application architecture for the CloudOps Event Platform.
+---
 
-The goal was not to implement business functionality but to create a foundation that supports future development without requiring major structural changes.
+# Objective
+
+The objective of this milestone was to establish the foundation of the CloudOps Event Platform by implementing the first end-to-end event ingestion capability.
+
+This milestone transformed the project from an infrastructure-only solution into a functioning cloud application capable of accepting events through an HTTP API and publishing them asynchronously for downstream processing.
+
+The implementation focused on creating a clean architectural boundary between request handling and event processing while establishing patterns that would support future milestones.
 
 ---
 
 # What Was Built
 
-Created a .NET solution containing:
+The following capabilities were introduced:
 
-* CloudOps.Api
-* CloudOps.Application
-* CloudOps.Domain
-* CloudOps.Infrastructure
-* CloudOps.Contracts
-* CloudOps.SharedKernel
+- ASP.NET Core Minimal API
+- Event submission endpoint
+- Request validation
+- Canonical Event Envelope
+- Correlation ID generation
+- Event publishing abstraction
+- Amazon SQS integration
+- Dependency Injection configuration
+- Clean Architecture project boundaries
+- Vertical Slice feature organization
 
-Added:
-
-* Unit test project.
-* Integration test project.
-* Shared build configuration.
-* Nullable reference types.
-* Warning-as-error enforcement.
+At the conclusion of this milestone, clients could successfully submit events into the CloudOps platform for asynchronous processing.
 
 ---
 
-# Key Concepts Learned
+# Key Architectural Decisions
 
-## Clean Architecture
+This milestone introduced several architectural decisions that continue to guide the platform.
 
-The application was separated into layers with clear responsibilities.
+### Event-Driven Communication
 
-Business logic remains independent from infrastructure and external systems.
+Rather than processing events synchronously, the API accepts requests and publishes them to Amazon SQS for downstream processing.
 
----
+This improves scalability, resilience, and response time.
 
-## Dependency Direction
+Reference:
 
-Dependencies point inward toward business logic.
-
-The domain does not depend on AWS, databases, or APIs.
+- ADR-0003 – Asynchronous Event Processing with Amazon SQS
 
 ---
 
-## Vertical Slice Architecture
+### Clean Architecture
 
-Features will be organized around user capabilities rather than technical categories.
+Business logic remains isolated from infrastructure implementations.
 
-This improves maintainability as the application grows.
+AWS SDK integrations are confined to the Infrastructure project while the Application layer communicates through interfaces.
 
----
+Reference:
 
-# Engineering Decisions
-
-## Why multiple projects?
-
-Separating responsibilities creates stronger boundaries and prevents accidental coupling.
+- ADR-0004 – Clean Architecture and Vertical Slice Organization
 
 ---
 
-## Why not start with the API?
+### Canonical Event Envelope
 
-Starting with endpoints often leads to business logic being placed inside controllers.
+Every accepted request is transformed into a consistent event structure before publication.
 
-The project establishes architecture before functionality.
+This ensures all downstream components process the same message format.
 
----
+Reference:
 
-# Challenges
-
-The primary challenge was balancing structure with simplicity.
-
-The architecture intentionally provides enough organization for growth without introducing unnecessary complexity.
+- ADR-0006 – Canonical Event Envelope
 
 ---
 
-# Next Steps
+# Technical Challenges
 
-Milestone 2.1 will introduce the first complete vertical slice:
+Several implementation challenges were encountered.
 
-Event Submission.
+## Separating Business Logic from Infrastructure
 
-The flow will be:
+The initial implementation risked coupling request handling directly to AWS SDK calls.
 
-```
-HTTP Request
-
-↓
-
-Validation
-
-↓
-
-Application Command
-
-↓
-
-Publish Message
-
-↓
-
-SQS
-```
-
-This will connect the application layer with the AWS infrastructure created during Milestone 1.
-
+This was resolved by introducing publisher abstractions and dependency injection.
 
 ---
 
-## Milestone Retrospective
+## Designing the Event Contract
 
-**`docs/learning/milestone-02-event-ingestion.md`**
+Determining which information belonged in platform metadata versus business payload required careful consideration.
 
+Separating these concerns resulted in a cleaner and more extensible event model.
 
-# Milestone 02 – Event Ingestion
+---
 
-## Objective
+## Feature Organization
 
-Build the first end-to-end vertical slice from HTTP request to Amazon SQS.
+Rather than using traditional Controller and Service folders, the project adopted Vertical Slice Architecture.
 
-## Achievements
+Although unfamiliar initially, this organization scales significantly better as features grow.
 
-- Implemented Clean Architecture boundaries.
-- Created the first application use case.
-- Designed a canonical event envelope.
-- Integrated with Amazon SQS.
-- Verified end-to-end message publishing.
-- Established dependency injection patterns.
-- Added structured logging.
-- Documented architectural decisions.
+---
 
-## Lessons Learned
+# Solutions Implemented
 
-- Keep AWS dependencies in the infrastructure layer.
-- Design message contracts before implementing integrations.
-- Structured logging provides better operational visibility than string interpolation.
-- Favor abstractions in the application layer to improve testability.
+The following implementation patterns were adopted.
 
-## Future Improvements
+- Minimal APIs for lightweight HTTP endpoints.
+- Dependency Injection throughout the application.
+- Application interfaces separating business logic from AWS implementations.
+- Immutable Event Envelope records.
+- JSON payload preservation using `JsonElement`.
+- Correlation ID generation during request acceptance.
 
-- Fluent validation or equivalent.
-- OpenAPI integration once package dependencies are updated.
-- Distributed tracing.
-- Request correlation via HTTP headers.
-- Contract versioning strategy.
+---
+
+# Lessons Learned
+
+Several important engineering lessons emerged during this milestone.
+
+## Thin APIs are easier to maintain
+
+Endpoints should coordinate requests rather than implement business logic.
+
+---
+
+## Contracts deserve careful design
+
+The Event Envelope became the foundation for every later milestone.
+
+A well-designed contract significantly reduced future implementation effort.
+
+---
+
+## Architecture should come before features
+
+Investing time in architectural boundaries simplified subsequent milestones involving persistence, background processing, and observability.
+
+---
+
+# Best Practices Identified
+
+- Keep endpoints focused on orchestration.
+- Use dependency injection consistently.
+- Publish immutable events.
+- Separate platform metadata from business payload.
+- Prefer asynchronous communication for long-running workflows.
+- Maintain infrastructure independence through abstractions.
+
+---
+
+# Future Improvements
+
+The following enhancements were intentionally deferred.
+
+- Dedicated Worker service
+- Event persistence
+- Duplicate detection
+- Dead Letter Queue
+- Custom CloudWatch metrics
+- Operational dashboards
+- Health endpoints
+
+These capabilities were implemented in later milestones.
+
+---
+
+# Related ADRs
+
+- ADR-0003 – Asynchronous Event Processing with Amazon SQS
+- ADR-0004 – Clean Architecture and Vertical Slice Organization
+- ADR-0005 – Event Ingestion API Design
+- ADR-0006 – Canonical Event Envelope
+
+---
+
+# Related Runbooks
+
+- Testing Worker SQS Connectivity
+- Observability Validation
+
+---
+
+# Milestone Outcome
+
+Milestone 2 established the application foundation for the CloudOps Event Platform.
+
+The platform now supported asynchronous event ingestion while maintaining clean architectural boundaries, providing the basis for the background processing, persistence, and observability capabilities implemented in subsequent milestones.
