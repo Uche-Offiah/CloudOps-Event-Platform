@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace CloudOps.Worker;
 
-public sealed class Worker: BackgroundService
+public sealed class Worker : BackgroundService
 {
     private readonly IAmazonSQS _sqs;
     private readonly AwsOptions _awsOptions;
@@ -28,7 +28,7 @@ public sealed class Worker: BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
-        
+
         _logger.LogInformation("CloudOps Worker started.");
 
         while (!stoppingToken.IsCancellationRequested)
@@ -36,7 +36,7 @@ public sealed class Worker: BackgroundService
 
             using var scope = _scopeFactory.CreateScope();
             var processor = scope.ServiceProvider.GetRequiredService<IEventMessageProcessor>();
-            
+
             try
             {
                 var request = new ReceiveMessageRequest
@@ -72,11 +72,11 @@ public sealed class Worker: BackgroundService
 
                     _logger.LogInformation("Started processing SQS message.");
 
-                    var result  = await processor.ProcessAsync(message.Body, stoppingToken);
+                    var result = await processor.ProcessAsync(message.Body, stoppingToken);
 
-                     if (!result.Succeeded)
+                    if (!result.Succeeded)
                     {
-                        _logger.LogWarning( "SQS message Processing failed. Reason: {FailureReason}", result.FailureReason);
+                        _logger.LogWarning("SQS message Processing failed. Reason: {FailureReason}", result.FailureReason);
 
                         continue;
                     }
@@ -92,7 +92,7 @@ public sealed class Worker: BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogError( ex, "Unexpected error while polling Amazon SQS");
+                _logger.LogError(ex, "Unexpected error while polling Amazon SQS");
             }
         }
 

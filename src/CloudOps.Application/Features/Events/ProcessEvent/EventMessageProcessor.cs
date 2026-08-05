@@ -35,9 +35,9 @@ public sealed class EventMessageProcessor(
                     ["Source"] = envelope.Source
                 }
             );
-            
-            _logger.LogInformation("Event processing started.");           
-            await _repository.SaveAsync( envelope, cancellationToken);
+
+            _logger.LogInformation("Event processing started.");
+            await _repository.SaveAsync(envelope, cancellationToken);
 
             _logger.LogInformation("Successfully persisted event {EventId}", envelope.EventId);
 

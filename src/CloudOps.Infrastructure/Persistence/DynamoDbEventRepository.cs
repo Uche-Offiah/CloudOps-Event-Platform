@@ -27,7 +27,7 @@ public sealed class DynamoDbEventRepository(
                 ["Source"] = envelope.Source,
                 ["TableName"] = _awsOptions.EventsTableName
             }
-        );        
+        );
         var request = new PutItemRequest
         {
             TableName = _awsOptions.EventsTableName,

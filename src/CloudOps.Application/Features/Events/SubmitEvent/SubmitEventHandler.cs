@@ -24,7 +24,7 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
     public async Task<SubmitEventResult> HandleAsync(SubmitEventCommand command, CancellationToken cancellationToken)
     {
         SubmitEventValidator.Validate(command);
-        
+
         var eventId = Guid.NewGuid();
 
         var acceptedAt = _clock.UtcNow;
@@ -49,11 +49,11 @@ public sealed class SubmitEventHandler : ISubmitEventHandler
             command.Source,
             acceptedAt,
             correlationId,
-            Version:  EventEnvelopeVersions.Initial,
+            Version: EventEnvelopeVersions.Initial,
             Payload: document.RootElement.Clone()
         );
-        
-         _logger.LogInformation("Submitting event");
+
+        _logger.LogInformation("Submitting event");
 
         await _publisher.PublishAsync(envelope, cancellationToken);
 
