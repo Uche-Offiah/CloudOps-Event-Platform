@@ -1,0 +1,91 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Validate
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore CloudOps.slnx
+
+      - name: Build Solution
+        run: |
+          dotnet build CloudOps.slnx \
+            --configuration Release \
+            --no-restore
+
+      - name: Verify Code Formatting
+        run: |
+          dotnet format CloudOps.slnx \
+            --verify-no-changes
+
+      - name: Run Architecture Tests
+        run: |
+          dotnet test tests/CloudOps.ArchitectureTests/CloudOps.ArchitectureTests.csproj \
+            --configuration Release \
+            --no-build
+
+      - name: Run Unit Tests
+        run: |
+          dotnet test tests/CloudOps.UnitTests/CloudOps.UnitTests.csproj \
+            --configuration Release \
+            --no-build
+
+      - name: Run Integration Tests
+        run: |
+          dotnet test tests/CloudOps.IntegrationTests/CloudOps.IntegrationTests.csproj \
+            --configuration Release \
+            --no-build
+
+      - name: Publish API
+        run: |
+          dotnet publish src/CloudOps.Api/CloudOps.Api.csproj \
+            --configuration Release \
+            --output artifacts/api \
+            --no-build
+
+      - name: Publish Worker
+        run: |
+          dotnet publish src/CloudOps.Worker/CloudOps.Worker.csproj \
+            --configuration Release \
+            --output artifacts/worker \
+            --no-build
+
+      - name: Upload API Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudops-api
+          path: artifacts/api
+
+      - name: Upload Worker Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudops-worker
+          path: artifacts/worker

@@ -10,9 +10,6 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// AWS SDK
-builder.Services.AddSingleton<IAmazonSQS>(_ =>
-    new AmazonSQSClient(RegionEndpoint.USEast2));
 
 // Worker
 builder.Services.AddHostedService<Worker>();

@@ -9,6 +9,7 @@ WORKDIR /src
 COPY CloudOps.slnx ./
 
 # Copy project files
+COPY src/CloudOps.Api/CloudOps.Api.csproj src/CloudOps.Api/
 COPY src/CloudOps.Application/CloudOps.Application.csproj src/CloudOps.Application/
 COPY src/CloudOps.Contracts/CloudOps.Contracts.csproj src/CloudOps.Contracts/
 COPY src/CloudOps.Domain/CloudOps.Domain.csproj src/CloudOps.Domain/

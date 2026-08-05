@@ -15,6 +15,7 @@ COPY src/CloudOps.Contracts/CloudOps.Contracts.csproj src/CloudOps.Contracts/
 COPY src/CloudOps.Domain/CloudOps.Domain.csproj src/CloudOps.Domain/
 COPY src/CloudOps.Infrastructure/CloudOps.Infrastructure.csproj src/CloudOps.Infrastructure/
 COPY src/CloudOps.Shared/CloudOps.Shared.csproj src/CloudOps.Shared/
+COPY src/CloudOps.Worker/CloudOps.Worker.csproj src/CloudOps.Worker/
 
 COPY tests/CloudOps.ArchitectureTests/CloudOps.ArchitectureTests.csproj tests/CloudOps.ArchitectureTests/
 COPY tests/CloudOps.IntegrationTests/CloudOps.IntegrationTests.csproj tests/CloudOps.IntegrationTests/
