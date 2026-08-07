@@ -1,14 +1,14 @@
 using Amazon.CDK;
 using Constructs;
-using Infra.Config;
+using CloudOps.Infrastructure.Cdk.Configuration;
 
-namespace Infra.Common;
+namespace CloudOps.Infrastructure.Cdk.Common;
 
 public static class TagHelper
 {
     public static void ApplyDefaultTags(
         Construct construct,
-        PlatformConfig config)
+        PlatformConfiguration config)
     {
         foreach (var tag in config.Tags)
         {

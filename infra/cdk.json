@@ -1,5 +1,5 @@
 {
-  "app": "dotnet run --project src/Infra/Infra.csproj",
+  "app": "dotnet run --project src/CloudOps.Infrastructure.Cdk/CloudOps.Infrastructure.Cdk.csproj",
   "watch": {
     "include": [
       "**"

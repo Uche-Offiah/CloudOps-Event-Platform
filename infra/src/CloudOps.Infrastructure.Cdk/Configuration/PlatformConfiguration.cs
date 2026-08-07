@@ -1,7 +1,7 @@
-namespace Infra.Config;
+namespace CloudOps.Infrastructure.Cdk.Configuration;
 using System.Collections.Generic;
 
-public sealed class PlatformConfig
+public sealed class PlatformConfiguration
 {
     public string ApplicationName { get; init; } = "cloudops";
 

@@ -3,18 +3,18 @@ using Amazon.CDK.AWS.CloudWatch;
 using Amazon.CDK.AWS.SNS;
 using Amazon.CDK.AWS.CloudWatch.Actions;
 using Constructs;
-using Infra.Common;
-using Infra.Config;
-using Infra.Models;
+using CloudOps.Infrastructure.Cdk.Common;
+using CloudOps.Infrastructure.Cdk.Configuration;
+using CloudOps.Infrastructure.Cdk.Models;
 
-namespace Infra.Constructs;
+namespace CloudOps.Infrastructure.Cdk.Constructs.Monitoring;
 
 public sealed class MonitoringConstruct : Construct
 {
     private const string MetricNamespace = "CloudOps/EventPlatform";
     public MonitoringResources Resources { get; }
 
-    public MonitoringConstruct(Construct scope, string id, PlatformConfig config, Topic alertsTopic): base(scope, id)
+    public MonitoringConstruct(Construct scope, string id, PlatformConfiguration config, Topic alertsTopic): base(scope, id)
     {
         var dashboard = new Dashboard(this, "Dashboard", new DashboardProps
         {

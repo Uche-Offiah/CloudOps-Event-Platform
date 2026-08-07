@@ -1,17 +1,17 @@
 using Amazon.CDK;
 using Amazon.CDK.AWS.SNS;
 using Constructs;
-using Infra.Common;
-using Infra.Config;
-using Infra.Models;
+using CloudOps.Infrastructure.Cdk.Common;
+using CloudOps.Infrastructure.Cdk.Configuration;
+using CloudOps.Infrastructure.Cdk.Models;
 
-namespace Infra.Constructs;
+namespace CloudOps.Infrastructure.Cdk.Constructs;
 
 public sealed class NotificationConstruct : Construct
 {
     public NotificationResources Resources { get; }
 
-    public NotificationConstruct(Construct scope, string id, PlatformConfig config): base(scope, id)
+    public NotificationConstruct(Construct scope, string id, PlatformConfiguration config): base(scope, id)
     {
         var topic = new Topic(this, "AlertsTopic", new TopicProps
         {

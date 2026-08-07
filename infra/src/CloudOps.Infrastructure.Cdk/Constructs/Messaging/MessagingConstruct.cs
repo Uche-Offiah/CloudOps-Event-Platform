@@ -1,17 +1,17 @@
 using Amazon.CDK;
 using Amazon.CDK.AWS.SQS;
 using Constructs;
-using Infra.Common;
-using Infra.Config;
-using Infra.Models;
+using CloudOps.Infrastructure.Cdk.Common;
+using CloudOps.Infrastructure.Cdk.Configuration;
+using CloudOps.Infrastructure.Cdk.Models;
 
-namespace Infra.Constructs;
+namespace CloudOps.Infrastructure.Cdk.Constructs.Messaging;
 
 public sealed class MessagingConstruct : Construct
 {
     public MessagingResources Resources { get; }
 
-    public MessagingConstruct(Construct scope, string id, PlatformConfig config): base(scope, id)
+    public MessagingConstruct(Construct scope, string id, PlatformConfiguration config): base(scope, id)
     {
         var deadLetterQueue = new Queue(this, "DeadLetterQueue", new QueueProps
         {

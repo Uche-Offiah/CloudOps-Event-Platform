@@ -2,16 +2,16 @@ using Amazon.CDK;
 using Amazon.CDK.AWS.DynamoDB;
 using DynamoAttribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Constructs;
-using Infra.Common;
-using Infra.Config;
+using CloudOps.Infrastructure.Cdk.Common;
+using CloudOps.Infrastructure.Cdk.Configuration;
 
-namespace Infra.Constructs;
+namespace CloudOps.Infrastructure.Cdk.Constructs.Storage;
 
 public sealed class StorageConstruct : Construct
 {
     public Table EventsTable { get; }
 
-    public StorageConstruct(Construct scope,string id, PlatformConfig config): base(scope, id)
+    public StorageConstruct(Construct scope,string id, PlatformConfiguration config): base(scope, id)
     {
         EventsTable = new Table(this, "EventsTable", new TableProps
         {
